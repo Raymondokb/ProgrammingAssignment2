@@ -1,6 +1,6 @@
 ## Put comments here that give an overall description of what your
 ## functions do
-# x1 <- 1:4; dim(x) <- c(2,2)
+# x1 <- 1:4; dim(x1) <- c(2,2)
 # aa <- makeCacheMatrix(x1)
 # cacheInverse(aa)
 
