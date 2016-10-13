@@ -1,36 +1,51 @@
 ## Put comments here that give an overall description of what your
 ## functions do
+# x1 <- 1:4; dim(x) <- c(2,2)
+# aa <- makeCacheMatrix(x1)
+# cacheInverse(aa)
 
-## Write a short comment describing this function
-# x is a matrix
-# eg:
-# x <- 1:4, dim(x) <- c(2,2)
-# y <- makeCacheMatrix(x)
-# y$set(x)
-makeCacheMatrix <- function(x = matrix()) {
-  m <- NULL
+makeCacheMatrix <- function(x = matrix()){
+  # x is a square invertible matrix (ie solve(x) exists)
+  # return a list with the following four ftns
+  # get: returns matrix
+  # set: sets the matrix
+  # setInv: sets the matrix inverse
+  # getInv: gets the matrix inverse
+  
+  
+  # set field: inv to null
+  inv <- NULL
+  
   set <- function(y){
+    # set field: x to input matrix y
     x <<- y
-    m <<- solve(y)
+    inv <<- NULL
   }
   get <- function() x
-  setinverse <- function(solve) m <<- solve
-  getinverse <- function() m
-  list(set = set, get = get, setinverse = setinverse, getinverse = getinverse)
+  setInv <- function(mean) inv <<- solve
+  getInv <- function() inv
+  list(set = set, get = get, setInv = setInv, getInv = getInv)
 }
 
+# cacheInverse calculates the inverse of the matrix object stored in makeCacheMatrix
+# If inverse not yet calculated, it stores the inverse in the field "inv" of makeCacheMatrix object
+# If inverse already calculated, it obtains inverse from field "inv" of makeCacheMatrix object
 
-## Write a short comment describing this function
-# eg: (from above)
-# cacheSolve(y) will print out inverse of matrix x
-cacheSolve <- function(x, ...) {
-  ## Return a matrix that is the inverse of 'x'
-  m <- x$getinverse()
-  if(!is.null(m)) {
+cacheInverse <- function(x, ...){
+  # getting field "inv" from makeCacheMatrix object
+  inv <- x$getInv()
+  
+  # inv==NULL only if "inv" field has not been set yet
+  if(!is.null(inv)) {
     message("getting cached data")
-    return(m)
+    return(inv) #exits function if this line is called
   }
+  
+  #following lines are reached if "inv" field is NULL
   data <- x$get()
-  m <- solve(data, ...)
-  m
+  #now inverse is calculated...
+  inv <- solve(data, ...)
+  #... and now stored. 
+  x$setInv(inv)
+  return(inv)
 }
